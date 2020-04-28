@@ -34,6 +34,8 @@ Full-reference Assessor along Salient Trajectories (FAST) VQA method
 
 The source code is tested with VisualStudio 2013 with OpenCV 2.4.13, and also MATLAB R2016a. 
 
+The compiled file **.MEXW/MEXA** is available, which can be used directly in MATLAB if you are not interested in the detailed implementation in the source code. Feel free to contact me to get the file.
+
 -----------------------------------------------------------------------
 
 NOTE：
