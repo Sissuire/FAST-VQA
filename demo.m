@@ -88,7 +88,8 @@ Qs  = QualitySm;
 Qt  = QualityMVm + QualityMVs;
 Qst = QualityMCm + QualityMCs;
 
-VideoQuality = mean(10000 * Qs .* Qt .* Qst);
+% use `sqrt` to condense the scale. (tricky)
+VideoQuality = sqrt(mean(10000 * Qs .* Qt .* Qst));  
 
 if abs(FAST_score - VideoQuality) < 1e-14
     fprintf('The testing video quality is: %.4f\n', VideoQuality);
