@@ -2,18 +2,6 @@
 
 ----------------------------------------------------------------------
 
-Version 1.0, Copyright(c) 2019
-
-Jinjian Wu, Yongxu Liu, Weisheng Dong, Guangming Shi, and Weisi Lin
-
-All Rights Reserved.
-
-----------------------------------------------------------------------
-
-Permission to use, copy, or modify this software and its documentation  for educational and research purposes only and without fee is here  granted, provided that this copyright notice and the original authors'  names appear on all copies and supporting documentation. This program shall not be used, rewritten, or adapted as the basis of a commercial software or hardware product without first obtaining permission of the authors. The authors make no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.
-
-----------------------------------------------------------------------
-
 This is an implementation of the algorithm for 
 Full-reference Assessor along Salient Trajectories (FAST) VQA method
 
@@ -24,6 +12,13 @@ Full-reference Assessor along Salient Trajectories (FAST) VQA method
 -----------------------------------------------------------------------
 
 ======================== **Usage** ==========================
+
+**upate** 2024.06.29
+
+We found that the code would encouter ERRORS when the input videos are NOT based on `.yuv` (some other formats like `.mp4/.avi`). The best way is to check the code in  `FAST_fun.cpp` [Line 523](https://github.com/Sissuire/FAST-VQA/blob/aec21fbfa7a6d2c590c2688d6f5ce63e6e2a2c34/FAST-VQA/FAST-VQA/FAST_fun.cpp#L523), debug and re-compile the code. 
+
+An alternative solution is to convert the `.mp4` videos to `.yuv` (YUV420p) files. We add a new file `cvtYUV.m` to do so, and this would definitely slow down the runtime, but I donot have much energy to maintain the whole code. Sorry for that. A more efficient way is to use `ffmpeg` to convert the file format quickly. `ffmpeg -i input_file.mp4 -f rawvideo -pix_fmt yuv420p output_file.yuv`
+
 
 **upate**
 
