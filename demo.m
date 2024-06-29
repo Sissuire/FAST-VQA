@@ -23,28 +23,38 @@
 % "Quality Assessment for Video with Degradation Along Salient Trajectories",
 % IEEE TMM, 2019. 
 %
-% Please contact `yongxu.liu@stu.xidian.edu.cn` if any issue with the code.
+% Please contact `yongxu.liu@xidian.edu.cn` if any issue with the code.
 % -----------------------------------------------------------------------
 % 
 
 clear
 close all
-clc
+% clc
 
 %% Compile the Code
 %### set your path of OpenCV Library in the function.
-CompileMex();
+% CompileMex();
 
 %% Provide testing video information
-% Note: ONLY types of YUV420p, .mp4, .avi are supported. 
-% YUV420p is recommended.
+% Note: ONLY YUV420p is supported correctedly.
 % Conversion is needed if the format is YUV422 or others.
 
-reference    = 'J:/_VideoDatabase/LIVE/ref/pa1_768x432_25fps.yuv';
-distorted    = 'J:/_VideoDatabase/LIVE/all-videos/pa2_768x432_25fps.yuv';
-width        = 768;
+% reference    = 'J:/_VideoDatabase/LIVE/ref/pa1_768x432_25fps.yuv';
+% distorted    = 'J:/_VideoDatabase/LIVE/all-videos/pa2_768x432_25fps.yuv';
+reference = 'B001.mp4';
+distorted = 'B001.mp4';
+
+width        = 768;   % ignore these parameters if the input videos are .mp4
 height       = 432;
-no_of_frames = 250;
+no_of_frames = 300;
+
+
+%% Converting the format if the video is not based on YUV420p
+% To support more format like .mp4, you should revise the code in `FAST_fun.cpp` and compile the code. 
+[reference, height, width, noof1, flag_r] = cvtYUV(reference, height, width, no_of_frames);
+[distorted, ~, ~, noof2, flag_d] = cvtYUV(distorted, height, width, no_of_frames);
+
+no_of_frames = min(noof1, noof2);
 
 %% Running the VQA model
 
@@ -69,9 +79,17 @@ no_of_frames = 250;
 
 tic
 
-[FAST_score, outInfo] = FAST_matlab(reference, distorted, width, height, no_of_frames);
+outInfo = FAST_matlab(reference, distorted, width, height, no_of_frames);
 
 toc
+
+if flag_r
+    delete(reference);
+end
+
+if flag_d
+    delete(distorted);
+end
 
 %% Getting results
 QualitySm   = outInfo(1, :);
@@ -90,11 +108,5 @@ Qst = QualityMCm + QualityMCs;
 
 % use `sqrt` to condense the scale. (tricky)
 VideoQuality = sqrt(mean(10000 * Qs .* Qt .* Qst));  
-FAST_score = sqrt(FAST_score);
-% VideoQuality = mean(10000 * Qs .* Qt .* Qst);  
 
-if abs(FAST_score - VideoQuality) < 1e-14
-    fprintf('The testing video quality is: %.4f\n', VideoQuality);
-else
-    fprintf('Something ERROR! \nPlease check the source code, or contact me.\n');
-end
+fprintf('The quality is %.4f.\n', VideoQuality)
